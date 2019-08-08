@@ -1,0 +1,324 @@
+{
+    // Python settings:
+    // "python.pythonPath": "D:\\Programas\\Miniconda\\python.exe",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "python.linting.pylintArgs": [
+        // "--disable=C0111",
+    ],
+    // "DataScience.changeDirOnImportExport": false,
+    // VSc settings
+    "editor.wordWrap": "on",
+    // LaTeX Workshop settings
+    "latex-workshop.chktex.run": "onSave",
+    "latex-workshop.latex.autoBuild.run": "never",
+    "latex-workshop.latex.autoBuild.interval": 10000, // in ms
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.subfolder.enabled": true,
+    "latex-workshop.latex.recipe.default": "lastUsed",
+    "latex-workshop.chktex.enabled": true,
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.latex.option.maxPrintLine.enabled": false,
+    "latex-workshop.latexindent.path": "C:\\Program Files\\MiKTeX 2.9\\scripts\\latexindent\\latexindent.exe",
+    // Now I'll be defining tools and recipes for my miktex enviroment.
+    // Your experience may vary
+    "latex-workshop.latex.tools": [
+        // Stock tools
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--max-print-line=10000",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ],
+            "env": {}
+        },
+        // Custom tools
+        {
+            "name": "mpdftex",
+            "command": "miktex-pdftex.exe",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--max-print-line=10000",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "mpdflatex",
+            "command": "miktex-pdftex.exe",
+            "args": [
+                "-synctex=1",
+                "-undump=pdflatex",
+                "-interaction=nonstopmode",
+                "--max-print-line=10000",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "texify_pdflatex_makeindex_bibtex",
+            "command": "texify.exe",
+            "args": [
+                "--pdf",
+                "--tex-option=\"--synctex=1\"",
+                "--tex-option=\"-interaction=nonstopmode\"",
+                "--tex-option=\"-file-line-error\"",
+                "--tex-option=\"--max-print-line=10000\"",
+                "--clean",
+                "%DOC%.tex"
+            ],
+            "env": {}
+        },
+        {
+            "name": "mluatex",
+            "command": "miktex-luatex.exe",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--max-print-line=10000",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "mlualatex",
+            "command": "miktex-luatex.exe",
+            "args": [
+                "-synctex=1",
+                "--fmt=lualatex",
+                "-interaction=nonstopmode",
+                "--max-print-line=10000",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "texify_lualatex_makeindex_bibtex",
+            "command": "texify.exe",
+            "args": [
+                "--pdf",
+                "--engine=luatex",
+                "--clean",
+                "--tex-option=\"--synctex=1\"",
+                "--tex-option=\"-interaction=nonstopmode\"",
+                "--tex-option=\"-file-line-error\"",
+                "--tex-option=\"--max-print-line=10000\"",
+                "%DOC%.tex"
+            ],
+            "env": {}
+        },
+        {
+            "name": "mxetex",
+            "command": "miktex-xetex.exe",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--max-print-line=10000",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "mxelatex",
+            "command": "miktex-xetex.exe",
+            "args": [
+                "-synctex=1",
+                "-undump=xelatex",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--max-print-line=10000",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "texify_xelatex_makeindex_bibtex",
+            "command": "texify.exe",
+            "args": [
+                "--pdf",
+                "--engine=xetex",
+                "--clean",
+                "--tex-option=\"--synctex=1\"",
+                "--tex-option=\"-interaction=nonstopmode\"",
+                "--tex-option=\"-file-line-error\"",
+                "--tex-option=\"--max-print-line=10000\"",
+                "%DOC%.tex"
+            ],
+            "env": {}
+        },
+        {
+            "name": "biber",
+            "command": "biber.exe",
+            "args": [
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "mmake_index",
+            "command": "miktex-makeindex.exe",
+            "args": [
+                "%DOC%"
+            ],
+            "env": {}
+        },
+    ],
+    "latex-workshop.latex.recipes": [
+        // Stock recipes
+        {
+            "name": "latexmk 🔃",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex`×2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        // Custom recipes
+        {
+            "name": "pdfTeX",
+            "tools": [
+                "mpdftex",
+            ]
+        },
+        {
+            "name": "pdfLaTeX",
+            "tools": [
+                "mpdflatex",
+            ]
+        },
+        {
+            "name": "pdflLatex ➞ MakeIndex ➞ BibTeX",
+            "tools": [
+                "texify_pdflatex_makeindex_bibtex",
+            ]
+        },
+        {
+            "name": "LuaTeX",
+            "tools": [
+                "mluatex",
+            ]
+        },
+        {
+            "name": "LuaLaTeX",
+            "tools": [
+                "mlualatex",
+            ]
+        },
+        {
+            "name": "LuaLaTeX ➞ MakeIndex ➞ BibTeX",
+            "tools": [
+                "texify_lualatex_makeindex_bibtex",
+            ]
+        },
+        {
+            "name": "XeTeX",
+            "tools": [
+                "mxetex",
+            ]
+        },
+        {
+            "name": "XeLaTeX",
+            "tools": [
+                "mxelatex",
+            ]
+        },
+        {
+            "name": "XeLaTeX ➞ MakeIndex ➞ BibTeX",
+            "tools": [
+                "texify_xelatex_makeindex_bibtex",
+            ]
+        },
+        {
+            "name": "Biber",
+            "tools": [
+                "biber",
+            ]
+        },
+        {
+            "name": "MakeIndex",
+            "tools": [
+                "mmake_index",
+            ]
+        },
+    ],
+    // File association settings:
+    "files.associations": {
+        "**/templates/*.html": "html",
+        "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+    },
+    // Git lens settings
+    "gitlens.codeLens.recentChange.enabled": false,
+    "gitlens.codeLens.authors.enabled": false,
+    "gitlens.currentLine.enabled": false,
+    // Spellright settings
+    "spellright.language": [
+        "en",
+        "pt"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext",
+        "python",
+        "html",
+        "django-html"
+    ],
+    "spellright.notificationClass": "warning",
+    "spellright.notificationClassByParser": {
+        "plain": "error",
+        "code": "information",
+        "markdown": "warning",
+        "latex": "warning",
+        "xml": "warning",
+        "html": "information",
+        "django-html": "information"
+    },
+    "spellright.spellContextByClass": {
+        "latex": "body code comments strings",
+        "markdown": "body code comments strings",
+        "cpp": "comments",
+        "python": "comments",
+        "html": "body strings comments",
+        "django-html": "body strings comments",
+    },
+}
