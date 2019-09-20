@@ -28,7 +28,7 @@ erro = 1
 
 ## Choosing Anisotropy (In-Plane (IP) or Out-of-Plane (OP) )
 
-Anisotropy = "IP"
+Anisotropy = "OP"
 
 ## max errors of fit
 
@@ -101,7 +101,7 @@ for files in tqdm(names, ncols=100):
 
     """ find peaks and determine number of peaks"""
     # Meus dados
-    peakind = signal.find_peaks(y, width=2, height=0.004)
+    peakind = signal.find_peaks(y, width=5, height=0.01)
     # Dados Ana
     # peakind = signal.find_peaks(y , width=10 , height= 0.01 )
 
@@ -195,7 +195,7 @@ for u in range(len(peakmag)):
 
     ## Valor de G a usar no resto dos fits G = 3E6  --  G1 = resultado do fit de kittel
 
-    G_a_usar = G1
+    G_a_usar = G
 
     ## dF to dH conversion
 
@@ -212,14 +212,14 @@ for u in range(len(peakmag)):
 
     damp = Model(damping)
 
-    ntirar = 3  # numero de pontos a tirar
+    ntirar = 1  # numero de pontos a tirar
 
     newdH = dH[ntirar:]
     newpeak = peak[ntirar:]
     # print(newpeak)
     parameters2 = damp.make_params(dH0=dH0, G=G_a_usar, alpha=alpha)
 
-    # parameters2['dH0'].vary=False
+    parameters2["dH0"].vary = False
     parameters2["G"].vary = False
 
     myfit = damp.fit(newdH, parameters2, x=newpeak)
