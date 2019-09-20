@@ -13,6 +13,7 @@ import pyqtgraph.opengl as gl
 import numpy as np
 from scipy import signal
 
+
 #%%
 
 ## Material variables
