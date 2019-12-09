@@ -20,15 +20,16 @@ from scipy import signal
 
 G = 3e6
 Ms = 1222
-Hu = 0
+Hu = 1
 Ha = 0
 dH0 = 0  # dH[0]
 alpha = 0.005
 erro = 1
+K4 = 1
 
-## Choosing Anisotropy (In-Plane (IP) or Out-of-Plane (OP) )
+## Choosing Anisotropy (In-Plane (IP) or Out-of-Plane (OP) or Ultrathin110 (U110))
 
-Anisotropy = "OP"
+Anisotropy = "U"
 
 ## max errors of fit
 
@@ -173,10 +174,15 @@ for u in range(len(peakmag)):
     def KittelOP(field, G, Hu):
         return (G) * (field + Hu)
 
+    def Ultrathin110(field, G, Hu, K4):
+        return G * ((field - ((2 * K4) / Hu)) * (field + Hu + ((2 * K4) / Hu))) ** 0.5
+
     if Anisotropy == "IP":
         Kit = Model(KittelIP)
-    else:
+    elif Anisotropy == "OP":
         Kit = Model(KittelOP)
+    else:
+        Kit = Model(Ultrathin110)
 
     ntira = 0  # numero de pontos a tirar
 
@@ -187,6 +193,7 @@ for u in range(len(peakmag)):
 
     paramK.add("Hu", value=Hu)
     paramK.add("G", value=G, min=2.8e6, max=3.1e6)
+    paramK.add("K4", value=K4)
 
     Kittelfit = Kit.fit(newpeak1, paramK, field=newfields)
     print(Kittelfit.fit_report())
@@ -335,3 +342,6 @@ for u in range(len(peakmag)):
     file.write("\n")
     file.write(myfit.fit_report())
     file.close()
+
+
+# %%

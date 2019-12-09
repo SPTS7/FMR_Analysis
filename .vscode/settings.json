@@ -321,4 +321,5 @@
         "html": "body strings comments",
         "django-html": "body strings comments",
     },
+    "python.pythonPath": "C:\\Miniconda3\\python.exe",
 }
