@@ -18,18 +18,22 @@ from scipy import signal
 
 ## Material variables
 
-G = 3e6
-Ms = 1222
-Hu = 1
+G = 2.93e6
+Ms = 1760  # emu/cc saturation magnetization
+Hintrinsic = 1
+K4 = 0  # anisotropias
+K2 = 0
+
 Ha = 0
 dH0 = 0  # dH[0]
+
 alpha = 0.005
 erro = 1
-K4 = 1
+
 
 ## Choosing Anisotropy (In-Plane (IP) or Out-of-Plane (OP) or Ultrathin110 (U110))
 
-Anisotropy = "U"
+Anisotropy = "U110"
 
 ## max errors of fit
 
@@ -168,35 +172,73 @@ for u in range(len(peakmag)):
 
     print("Fit peak number:" + str(u + 1))
 
-    def KittelIP(field, G, Hu):
-        return G * ((field) * (field - Hu)) ** 0.5
+    def KittelIP(field, G, Hintrinsic):
+        return G * ((field) * (field - Hintrinsic)) ** 0.5
 
-    def KittelOP(field, G, Hu):
-        return (G) * (field + Hu)
+    def KittelOP(field, G, Hintrinsic):
+        return (G) * (field + Hintrinsic)
 
-    def Ultrathin110(field, G, Hu, K4):
-        return G * ((field - ((2 * K4) / Hu)) * (field + Hu + ((2 * K4) / Hu))) ** 0.5
+    def Ultrathin110(field, G, K2, K4, Ms):
+        return (
+            G
+            * 2
+            * math.pi
+            * (
+                (field - ((2 * K4) / Ms))
+                * (field + 4 * math.pi * Ms - ((2 * K2) / Ms) + ((2 * K4) / Ms))
+            )
+            ** 0.5
+        )
 
     if Anisotropy == "IP":
         Kit = Model(KittelIP)
+
+        ntira = 0  # numero de pontos a tirar
+
+        newfields = fields[ntira:]
+        newpeak1 = peak[ntira:]
+
+        paramK = Kit.make_params()
+
+        paramK.add("Hintrinsic", value=Hintrinsic)
+        paramK.add("G", value=G, min=2.8e6, max=3.1e6)
+
+        Kittelfit = Kit.fit(newpeak1, paramK, field=newfields)
+        print(Kittelfit.fit_report())
+
     elif Anisotropy == "OP":
         Kit = Model(KittelOP)
-    else:
+
+        ntira = 0  # numero de pontos a tirar
+
+        newfields = fields[ntira:]
+        newpeak1 = peak[ntira:]
+
+        paramK = Kit.make_params()
+
+        paramK.add("Hintrinsic", value=Hintrinsic)
+        paramK.add("G", value=G, min=2.8e6, max=3.1e6)
+
+        Kittelfit = Kit.fit(newpeak1, paramK, field=newfields)
+        print(Kittelfit.fit_report())
+
+    elif Anisotropy == "U110":
         Kit = Model(Ultrathin110)
 
-    ntira = 0  # numero de pontos a tirar
+        ntira = 0  # numero de pontos a tirar
 
-    newfields = fields[ntira:]
-    newpeak1 = peak[ntira:]
+        newfields = fields[ntira:]
+        newpeak1 = peak[ntira:]
 
-    paramK = Kit.make_params()
+        paramK = Kit.make_params()
 
-    paramK.add("Hu", value=Hu)
-    paramK.add("G", value=G, min=2.8e6, max=3.1e6)
-    paramK.add("K4", value=K4)
+        paramK.add("G", value=G)
+        paramK.add("K4", value=K4)
+        paramK.add("K2", value=K2)
+        paramK.add("Ms", value=Ms)
 
-    Kittelfit = Kit.fit(newpeak1, paramK, field=newfields)
-    print(Kittelfit.fit_report())
+        Kittelfit = Kit.fit(newpeak1, paramK, field=newfields)
+        print(Kittelfit.fit_report())
 
     G1 = Kittelfit.best_values["G"]
 
