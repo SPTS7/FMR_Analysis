@@ -22,7 +22,7 @@ G = 2.93e6
 Ms = 1760  # emu/cc saturation magnetization
 Hintrinsic = 1
 K4 = 0  # anisotropias
-K2 = 0
+K2 = 200
 
 Ha = 0
 dH0 = 0  # dH[0]
@@ -59,10 +59,11 @@ paramos = []
 
 ## Opening files and getting field values from filenames
 
-names = glob.glob("*.dat")
+names = glob.glob("*.txt")
 
 arr = [re.split(r"(\d+)", s) for s in names]
-arr.sort(key=lambda x: int(x[1]))
+arr.sort(key=lambda x: int(x[3]))
+joined = ["".join(row) for row in arr]
 
 for x in arr:
     field.append(int(x[-2]))
@@ -93,6 +94,7 @@ def make_model(num):
 
 
 nn = 0
+names = joined
 
 for files in tqdm(names, ncols=100):
     # print(files)
@@ -106,7 +108,7 @@ for files in tqdm(names, ncols=100):
 
     """ find peaks and determine number of peaks"""
     # Meus dados
-    peakind = signal.find_peaks(y, width=5, height=0.01)
+    peakind = signal.find_peaks(y, width=5, height=0.0008)
     # Dados Ana
     # peakind = signal.find_peaks(y , width=10 , height= 0.01 )
 
@@ -181,8 +183,6 @@ for u in range(len(peakmag)):
     def Ultrathin110(field, G, K2, K4, Ms):
         return (
             G
-            * 2
-            * math.pi
             * (
                 (field - ((2 * K4) / Ms))
                 * (field + 4 * math.pi * Ms - ((2 * K2) / Ms) + ((2 * K4) / Ms))
@@ -232,7 +232,7 @@ for u in range(len(peakmag)):
 
         paramK = Kit.make_params()
 
-        paramK.add("G", value=G)
+        paramK.add("G", value=G, min=2.8e6, max=3.1e6)
         paramK.add("K4", value=K4)
         paramK.add("K2", value=K2)
         paramK.add("Ms", value=Ms)
