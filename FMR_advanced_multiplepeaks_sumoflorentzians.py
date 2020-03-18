@@ -35,7 +35,8 @@ erro = 1
 
 Anisotropy = "U110"
 
-## max errors of fit
+## max errors of fit, mostly never used
+
 
 erromaxlorentzfwhm = 0.1
 erromaxlorentzpeak = 0.01
